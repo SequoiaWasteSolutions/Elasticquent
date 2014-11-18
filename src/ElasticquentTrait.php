@@ -284,29 +284,31 @@ trait ElasticquentTrait
      *
      * Search with a query array
      *
-     * @param   array $query
-     * @param   array $aggregations
-     * @param   array $sourceFields
-     * @param   int   $limit
-     * @param   int   $offset
+     * @param array $query
+     * @param array $options
+     *              ['limit']
+     *              ['offset']
+     *              ['sourceFields']
+     *              ['aggregations']
+     *
      * @return  ElasticquentResultCollection
      */
-    public static function searchByQuery($query = null, $aggregations = null, $sourceFields = null, $limit = null, $offset = null)
+    public static function searchByQuery($query = null, array $options = [])
     {
         $instance = new static;
 
-        $params = $instance->getBasicEsParams(true, true, true, $limit, $offset);
+        $params = $instance->getBasicEsParams(true, true, true, $options['limit'], $options['offset']);
 
-        if ($sourceFields) {
-            $params['body']['_source']['include'] = $sourceFields;
+        if ($options['sourceFields']) {
+            $params['body']['_source']['include'] = $options['sourceFields'];
         }
 
         if ($query) {
             $params['body']['query'] = $query;
         }
 
-        if ($aggregations) {
-            $params['body']['aggs'] = $aggregations;
+        if ($options['aggregations']) {
+            $params['body']['aggs'] = $options['aggregations'];
         }
 
         $result = $instance->getElasticSearchClient()->search($params);
