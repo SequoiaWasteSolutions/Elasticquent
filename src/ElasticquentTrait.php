@@ -297,7 +297,7 @@ trait ElasticquentTrait
 
         $result = $instance->getElasticSearchClient()->search($params);
 
-        return new ResultCollection($result, $instance = new static);
+        return $instance->newResultCollection($result);
     }
 
     /**
@@ -318,7 +318,7 @@ trait ElasticquentTrait
 
         $result = $instance->getElasticSearchClient()->search($params);
 
-        return new ResultCollection($result, $instance = new static);
+        return $instance->newResultCollection($result);
     }
 
     /**
@@ -590,4 +590,15 @@ trait ElasticquentTrait
 
         return $instance;
     }
+    /**
+     * New Collection
+     *
+     * @param array $results
+     * @return ElasticquentResultCollection
+     */
+    protected function newResultCollection(array $results = array())
+    {
+        return new ElasticquentResultCollection($results, new static, $this->getEloquentModelReturnOption());
+    }
+
 }
