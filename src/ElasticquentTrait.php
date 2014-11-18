@@ -1,7 +1,7 @@
 <?php namespace Elasticquent;
 
-use \Elasticquent\ElasticquentCollection as ElasticquentCollection;
-use \Elasticquent\ElasticquentResultCollection as ResultCollection;
+use \Elasticquent\ElasticquentCollection;
+use \Elasticquent\ElasticquentResultCollection;
 
 /**
  * Elasticquent Trait
@@ -155,7 +155,7 @@ trait ElasticquentTrait
     /**
      * Uses Timestamps In Index
      *
-     * @return void
+     * @return bool
      */
     public function usesTimestampsInIndex()
     {
@@ -287,9 +287,9 @@ trait ElasticquentTrait
      * @param   array $query
      * @param   array $aggregations
      * @param   array $sourceFields
-     * @param   int $limit
-     * @param   int $offset
-     * @return  ResultCollection
+     * @param   int   $limit
+     * @param   int   $offset
+     * @return  ElasticquentResultCollection
      */
     public static function searchByQuery($query = null, $aggregations = null, $sourceFields = null, $limit = null, $offset = null)
     {
@@ -320,7 +320,7 @@ trait ElasticquentTrait
      * Simple search using a match _all query
      *
      * @param   string $term
-     * @return  ResultCollection
+     * @return  ElasticquentResultCollection
      */
     public static function search($term = null)
     {
@@ -343,7 +343,7 @@ trait ElasticquentTrait
      */
     public function addToIndex()
     {
-        if ( ! $this->exists) {
+        if (!$this->exists) {
             throw new Exception('Document does not exist.');
         }
 
@@ -394,16 +394,16 @@ trait ElasticquentTrait
      * @param     bool $getIdIfPossible
      * @param     bool $getSourceIfPossible
      * @param     bool $getTimestampIfPossible
-     * @param     int $limit
-     * @param     int $offset
+     * @param     int  $limit
+     * @param     int  $offset
      *
      * @return    array
      */
     public function getBasicEsParams($getIdIfPossible = true, $getSourceIfPossible = false, $getTimestampIfPossible = false, $limit = null, $offset = null)
     {
         $params = array(
-            'index'     => $this->getIndexName(),
-            'type'      => $this->getTypeName()
+            'index' => $this->getIndexName(),
+            'type'  => $this->getTypeName()
         );
 
         if ($getIdIfPossible and $this->getKey()) {
@@ -452,7 +452,7 @@ trait ElasticquentTrait
     /**
      * Get Mapping
      *
-     * @return void
+     * @return array
      */
     public static function getMapping()
     {
@@ -476,8 +476,8 @@ trait ElasticquentTrait
         $mapping = $instance->getBasicEsParams();
 
         $params = array(
-            '_source'       => array('enabled' => true),
-            'properties'    => $instance->getMappingProperties()
+            '_source'    => array('enabled' => true),
+            'properties' => $instance->getMappingProperties()
         );
 
         $mapping['body'][$instance->getTypeName()] = $params;
@@ -536,7 +536,7 @@ trait ElasticquentTrait
         $client = $instance->getElasticSearchClient();
 
         $index = array(
-            'index'     => $instance->getIndexName()
+            'index' => $instance->getIndexName()
         );
 
         if ($shards) {
@@ -571,7 +571,7 @@ trait ElasticquentTrait
      *
      * Variation on newFromBuilder. Instead, takes
      *
-     * @param  array  $hit
+     * @param  array $hit
      * @return static
      */
     public function newFromHitBuilder($hit = array())
@@ -587,7 +587,7 @@ trait ElasticquentTrait
             }
         }
 
-        $instance->setRawAttributes((array) $attributes, true);
+        $instance->setRawAttributes((array)$attributes, true);
 
         // In addition to setting the attributes
         // from the index, we will set the score as well.

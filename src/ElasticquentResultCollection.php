@@ -11,9 +11,10 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
     /**
      * _construct
      *
-     * @param   $results elasticsearch results
-     * @param $instance
-     * @return \Elasticquent\ElasticquentResultCollection
+     * @param array $results elasticsearch results
+     * @param       $instance
+     * @param bool  $returnEloquent
+     * @return ElasticquentResultCollection
      */
     public function __construct($results, $instance, $returnEloquent = false)
     {
@@ -22,10 +23,10 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
 
         // Take our result data and map it
         // to some class properties.
-        $this->took         = $results['took'];
-        $this->timed_out    = $results['timed_out'];
-        $this->shards       = $results['_shards'];
-        $this->hits         = $results['hits'];
+        $this->took = $results['took'];
+        $this->timed_out = $results['timed_out'];
+        $this->shards = $results['_shards'];
+        $this->hits = $results['hits'];
         $this->aggregations = isset($results['aggregations']) ? $results['aggregations'] : array();
 
         // Now we need to assign our hits to the
