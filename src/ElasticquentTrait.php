@@ -11,6 +11,42 @@ use \Elasticquent\ElasticquentResultCollection as ResultCollection;
  */
 trait ElasticquentTrait
 {
+
+    public static function boot()
+    {
+
+        parent::boot();
+
+        $client = new Client();
+        $instance = new static;
+
+        static::created(function ($model) use ($client, $instance) {
+            $client->index([
+                'index' => $instance->getIndex(),
+                'type'  => $instance->getType(),
+                'id'    => $model->getKey(),
+                'body'  => $model->toArray()
+            ]);
+        });
+
+        static::updated(function ($model) use ($client, $instance) {
+            $client->index([
+                'index' => $instance->getIndex(),
+                'type'  => $instance->getType(),
+                'id'    => $model->getKey(),
+                'body'  => $model->toArray()
+            ]);
+        });
+
+        static::deleted(function ($model) use ($client, $instance) {
+            $client->index([
+                'index' => $instance->getIndex(),
+                'type'  => $instance->getType(),
+                'id'    => $model->getKey(),
+            ]);
+        });
+    }
+
     /**
      * Uses Timestamps In Index
      *
