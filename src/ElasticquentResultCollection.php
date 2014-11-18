@@ -15,8 +15,11 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
      * @param $instance
      * @return \Elasticquent\ElasticquentResultCollection
      */
-    public function __construct($results, $instance)
+    public function __construct($results, $instance, $returnEloquent = false)
     {
+
+        $this->instance = $instance;
+
         // Take our result data and map it
         // to some class properties.
         $this->took         = $results['took'];
@@ -27,22 +30,53 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
 
         // Now we need to assign our hits to the
         // items in the collection.
-        $this->items = $this->hitsToItems($instance);
+        $this->items = $this->hitsToItems($returnEloquent);
     }
 
     /**
      * Hits To Items
      *
-     * @param   Eloquent model instance $instance
      * @return  array
      */
-    private function hitsToItems($instance)
+    protected function hitsToItems($returnEloquent)
     {
-        $items = array();
+
+        if ($returnEloquent) {
+            return $this->hitsToEloquentItems();
+        }
+
+        return $this->hitsToEloquentItems();
+
+    }
+
+    /**
+     * Hits to Eloquent Models
+     *
+     * @return array
+     */
+    protected function hitsToEloquentItems()
+    {
+
+        $items = [];
 
         foreach ($this->hits['hits'] as $hit) {
+            $items[] = $this->instance->eloquentHitBuilder($hit);
+        }
 
-            $items[] = $instance->newFromHitBuilder($hit);
+        return $items;
+    }
+
+    /**
+     * Hits to ElasticquentItems
+     *
+     * @return array
+     */
+    protected function hitsToElasticquentItems()
+    {
+        $items = [];
+
+        foreach ($this->hits['hits'] as $hit) {
+            $items[] = $this->instance->newFromHitBuilder($hit);
         }
 
         return $items;

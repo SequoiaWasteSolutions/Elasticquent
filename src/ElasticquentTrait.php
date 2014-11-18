@@ -129,6 +129,20 @@ trait ElasticquentTrait
     }
 
     /**
+     * Get option to return Eloquent Models
+     *
+     * @return bool
+     */
+    protected function getEloquentModelReturnOption()
+    {
+        if (\Config::has('elasticquent.return_eloquent_models')) {
+            return \Config::get('elasticquent.return_eloquent_models');
+        }
+
+        return false;
+    }
+
+    /**
      * Get Type Name
      *
      * @return string
@@ -590,6 +604,22 @@ trait ElasticquentTrait
 
         return $instance;
     }
+
+    /**
+     *
+     *
+     * @param $hit
+     * @return mixed
+     */
+    public function eloquentHitBuilder($hit)
+    {
+
+        $model = $this->find($hit['_id']);
+        $model->score = $hit['_score'];
+
+        return $model;
+    }
+
     /**
      * New Collection
      *
