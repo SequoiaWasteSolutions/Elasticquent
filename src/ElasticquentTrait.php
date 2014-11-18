@@ -1,7 +1,6 @@
 <?php namespace Elasticquent;
 
-use \Elasticquent\ElasticquentCollection;
-use \Elasticquent\ElasticquentResultCollection;
+use Elasticsearch\Client;
 
 /**
  * Elasticquent Trait
