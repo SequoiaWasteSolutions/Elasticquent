@@ -306,7 +306,7 @@ trait ElasticquentTrait
 
         $params = $instance->getBasicEsParams(true, true, true, $options['limit'], $options['offset']);
 
-        if ($options['sourceFields']) {
+        if (isset($options['sourceFields'])) {
             $params['body']['_source']['include'] = $options['sourceFields'];
         }
 
@@ -314,7 +314,7 @@ trait ElasticquentTrait
             $params['body']['query'] = $query;
         }
 
-        if ($options['aggregations']) {
+        if (isset($options['aggregations'])) {
             $params['body']['aggs'] = $options['aggregations'];
         }
 
