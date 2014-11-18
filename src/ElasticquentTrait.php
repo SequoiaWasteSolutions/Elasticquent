@@ -296,6 +296,14 @@ trait ElasticquentTrait
     {
         $instance = new static;
 
+        if(!isset($options['offset'])){
+            $options['offset'] = null;
+        }
+
+        if(!isset($options['limit'])){
+            $options['limit'] = null;
+        }
+
         $params = $instance->getBasicEsParams(true, true, true, $options['limit'], $options['offset']);
 
         if ($options['sourceFields']) {
