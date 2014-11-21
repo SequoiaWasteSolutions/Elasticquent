@@ -57,8 +57,16 @@ class ElasticquentResultCollection extends \Illuminate\Database\Eloquent\Collect
      */
     protected function hitsToEloquentItems()
     {
-
         $items = [];
+
+        if (empty($this->hits['hits'])) {
+            $model = $this->instance;
+            $model->score = 0;
+            $model->id = null;
+            $items[] = $model;
+            return $items;
+        }
+
 
         foreach ($this->hits['hits'] as $hit) {
             $items[] = $this->instance->eloquentHitBuilder($hit);
