@@ -21,8 +21,8 @@ trait ElasticquentTrait
 
         static::created(function ($model) use ($client, $instance) {
             $client->index([
-                'index' => $instance->getIndex(),
-                'type'  => $instance->getType(),
+                'index' => $instance->getIndexName(),
+                'type'  => $instance->getTypeName(),
                 'id'    => $model->getKey(),
                 'body'  => $model->toArray()
             ]);
@@ -30,8 +30,8 @@ trait ElasticquentTrait
 
         static::updated(function ($model) use ($client, $instance) {
             $client->index([
-                'index' => $instance->getIndex(),
-                'type'  => $instance->getType(),
+                'index' => $instance->getIndexName(),
+                'type'  => $instance->getTypeName(),
                 'id'    => $model->getKey(),
                 'body'  => $model->toArray()
             ]);
@@ -39,8 +39,8 @@ trait ElasticquentTrait
 
         static::deleted(function ($model) use ($client, $instance) {
             $client->index([
-                'index' => $instance->getIndex(),
-                'type'  => $instance->getType(),
+                'index' => $instance->getIndexName(),
+                'type'  => $instance->getTypeName(),
                 'id'    => $model->getKey(),
             ]);
         });
